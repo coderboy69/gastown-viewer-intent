@@ -1,15 +1,16 @@
 # Gastown Viewer Intent
 
-> Local-first Mission Control for Beads + Gastown-style agent swarms.
+> Mission Control dashboard for [Gastown](https://github.com/steveyegge/gastown) multi-agent workspaces.
 
 ## What It Does
 
-- **Board View**: Kanban-style board showing issues by status
-- **Issue Details**: Deep-dive into any issue with children and dependency visualization
-- **Graph Export**: Dependency graph in multiple formats (DOT, JSON)
-- **Events Stream**: Real-time SSE feed of Beads state changes
-- **TUI Client**: Terminal UI for keyboard-driven navigation
-- **Web UI**: Browser-based dashboard with React
+**Gastown Viewer** provides real-time visibility into your Gas Town agent swarms:
+
+- **Agent Dashboard**: See all agents (Mayor, Deacon, Witness, Refinery, Polecats, Crew) with live status
+- **Rig Overview**: Monitor project rigs with agent health and activity
+- **Convoy Tracking**: Track batch work progress across rigs
+- **Beads Integration**: Kanban board view of issues managed by your agents
+- **Web + TUI**: Browser dashboard or terminal interface
 
 ## Quickstart
 
@@ -17,34 +18,38 @@
 
 - Go 1.22+
 - Node.js 20+
-- [Beads](https://github.com/intent-solutions-io/beads) (`bd` CLI in PATH)
+- [Gastown](https://github.com/steveyegge/gastown) installed at `~/gt`
+- [Beads](https://github.com/steveyegge/beads) (`bd` CLI in PATH)
 
 ### Run
 
 ```bash
-# Start the daemon + web dev server
+# Start daemon + web UI
 make dev
 
-# Or run components separately:
-go run ./cmd/gvid              # Daemon on :7070
-cd web && npm run dev          # Web UI on :5173
-
-# TUI client (requires daemon running)
-go run ./cmd/gvi-tui
+# Open http://localhost:5173
+# Toggle between "Beads" and "Gas Town" tabs
 ```
 
 ### Verify
 
 ```bash
+# Health check
 curl http://localhost:7070/api/v1/health
-# {"status":"ok","beads_initialized":true}
+
+# Gas Town status
+curl http://localhost:7070/api/v1/town/status
+# {"healthy":true,"active_agents":5,"total_agents":8,"active_rigs":2}
+
+# List agents
+curl http://localhost:7070/api/v1/town/agents
 ```
 
 ## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Gastown Viewer Intent                     │
+│                      Gastown Viewer Intent                       │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │   ┌──────────────┐      ┌──────────────┐      ┌──────────────┐  │
@@ -57,84 +62,98 @@ curl http://localhost:7070/api/v1/health
 │                                ▼                                 │
 │                    ┌───────────────────────┐                    │
 │                    │       gvid Daemon     │                    │
-│                    │  (HTTP API + SSE)     │                    │
-│                    │   localhost:7070      │                    │
+│                    │     localhost:7070    │                    │
 │                    └───────────┬───────────┘                    │
 │                                │                                 │
-│                                ▼                                 │
-│                    ┌───────────────────────┐                    │
-│                    │    Beads Adapter      │                    │
-│                    │   (shells to `bd`)    │                    │
-│                    └───────────┬───────────┘                    │
-│                                │                                 │
-│                                ▼                                 │
-│                    ┌───────────────────────┐                    │
-│                    │     .beads/ state     │                    │
-│                    │   (managed by bd)     │                    │
-│                    └───────────────────────┘                    │
+│              ┌─────────────────┼─────────────────┐              │
+│              ▼                                   ▼              │
+│   ┌───────────────────────┐         ┌───────────────────────┐  │
+│   │   Gastown Adapter     │         │    Beads Adapter      │  │
+│   │   (reads ~/gt/)       │         │   (shells to `bd`)    │  │
+│   └───────────┬───────────┘         └───────────┬───────────┘  │
+│               │                                 │               │
+│               ▼                                 ▼               │
+│   ┌───────────────────────┐         ┌───────────────────────┐  │
+│   │      Gas Town         │         │     .beads/ state     │  │
+│   │  ~/gt (rigs, agents)  │         │   (issues, deps)      │  │
+│   └───────────────────────┘         └───────────────────────┘  │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+## Gas Town Concepts
+
+| Concept | Description |
+|---------|-------------|
+| **Town** | Workspace root (`~/gt`) containing all rigs and town-level agents |
+| **Mayor** | Town coordinator - routes work across rigs |
+| **Deacon** | Town patrol - monitors health and escalates issues |
+| **Rig** | Project container with its own agent pool |
+| **Witness** | Rig-level overseer - manages polecat lifecycle |
+| **Refinery** | Merge queue processor for the rig |
+| **Polecats** | Transient workers spawned for specific tasks |
+| **Crew** | Persistent user-managed workers in a rig |
+| **Convoy** | Batch work tracking across multiple rigs |
+
 ## API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/health` | GET | Health check + beads status |
-| `/api/v1/issues` | GET | List all issues (supports filters) |
-| `/api/v1/issues/:id` | GET | Get single issue with children/deps |
-| `/api/v1/board` | GET | Board view (issues grouped by status) |
-| `/api/v1/graph` | GET | Dependency graph (JSON) |
-| `/api/v1/events` | GET | SSE stream of state changes |
+### Gas Town
 
-## Roadmap
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/v1/town/status` | Town health, agent/rig counts |
+| `GET /api/v1/town` | Full town structure |
+| `GET /api/v1/town/rigs` | List all rigs |
+| `GET /api/v1/town/rigs/:name` | Single rig details |
+| `GET /api/v1/town/agents` | All agents with status |
+| `GET /api/v1/town/convoys` | Active convoys |
+| `GET /api/v1/town/mail/:address` | Agent mail inbox |
 
-Tracked via Beads issues in this repo:
+### Beads (Issues)
 
-**Epic**: `gastown-viewer-intent-btp` — Gastown Viewer Intent MVP
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/v1/health` | Health check |
+| `GET /api/v1/board` | Kanban board view |
+| `GET /api/v1/issues` | List issues |
+| `GET /api/v1/issues/:id` | Issue details |
+| `GET /api/v1/graph` | Dependency graph |
+| `GET /api/v1/events` | SSE event stream |
 
-| Issue | Title | Blocked By |
-|-------|-------|------------|
-| `.1` | Domain model + event schema | — |
-| `.2` | Beads adapter via bd CLI | .1 |
-| `.3` | Daemon HTTP API + SSE events | .2 |
-| `.4` | TUI client (Bubbletea) | .3 |
-| `.5` | Web UI (Vite+React) | .3 |
-| `.6` | Dev tooling + docs | — |
-| `.7` | MVP demo + sanity checks | .4, .5, .6 |
+## Configuration
 
+```bash
+# Custom Gas Town location
+go run ./cmd/gvid --town /path/to/gt
+
+# Custom port
+go run ./cmd/gvid --port 8080
+
+# All options
+go run ./cmd/gvid --help
 ```
-Dependency Graph:
-.1 → .2 → .3 → .4 → .7
-           ↘ .5 → .7
-      .6 ────────→ .7
-```
-
-Run `bd ready` to see unblocked work. Run `bd blocked` to see dependencies.
 
 ## Project Structure
 
 ```
 gastown-viewer-intent/
-├── 000-docs/              # Documentation (flat)
 ├── cmd/
-│   ├── gvid/              # Daemon binary
-│   └── gvi-tui/           # TUI binary
+│   ├── gvid/              # Daemon
+│   └── gvi-tui/           # TUI client
 ├── internal/
 │   ├── api/               # HTTP handlers
-│   ├── beads/             # Beads adapter (bd CLI wrapper)
-│   ├── model/             # Domain types
-│   └── store/             # State management
+│   ├── gastown/           # Gas Town adapter (reads ~/gt)
+│   ├── beads/             # Beads adapter (bd CLI)
+│   └── model/             # Domain types
 ├── web/                   # React + Vite frontend
-├── scripts/               # Dev scripts
-├── Makefile               # Build targets
-└── README.md
+└── Makefile
 ```
 
 ## License
 
-MIT — See [LICENSE](LICENSE)
+MIT
 
-## Disclaimer
+## Related Projects
 
-This project is not affiliated with the original Beads or Gastown authors. It is an independent viewer/dashboard implementation that integrates with those tools via their public CLIs.
+- [Gastown](https://github.com/steveyegge/gastown) - Multi-agent workspace orchestrator
+- [Beads](https://github.com/steveyegge/beads) - Local-first issue tracking with dependencies

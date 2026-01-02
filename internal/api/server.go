@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/intent-solutions-io/gastown-viewer-intent/internal/beads"
+	"github.com/intent-solutions-io/gastown-viewer-intent/internal/gastown"
 )
 
 // Config holds server configuration.
@@ -17,6 +18,7 @@ type Config struct {
 	Host        string
 	CORSOrigins []string
 	Version     string
+	TownRoot    string // Gas Town workspace root (default: ~/gt)
 }
 
 // DefaultConfig returns configuration with sensible defaults.
@@ -26,24 +28,27 @@ func DefaultConfig() Config {
 		Host:        "localhost",
 		CORSOrigins: []string{"http://localhost:5173"},
 		Version:     "0.1.0",
+		TownRoot:    "", // Empty means use default ~/gt
 	}
 }
 
 // Server is the HTTP API server.
 type Server struct {
-	config  Config
-	adapter beads.Adapter
-	mux     *http.ServeMux
-	sse     *SSEBroker
+	config    Config
+	adapter   beads.Adapter
+	gtAdapter gastown.Adapter
+	mux       *http.ServeMux
+	sse       *SSEBroker
 }
 
 // NewServer creates a new API server.
 func NewServer(config Config, adapter beads.Adapter) *Server {
 	s := &Server{
-		config:  config,
-		adapter: adapter,
-		mux:     http.NewServeMux(),
-		sse:     NewSSEBroker(),
+		config:    config,
+		adapter:   adapter,
+		gtAdapter: gastown.NewFSAdapter(config.TownRoot),
+		mux:       http.NewServeMux(),
+		sse:       NewSSEBroker(),
 	}
 	s.registerRoutes()
 	return s
@@ -54,18 +59,35 @@ func (s *Server) registerRoutes() {
 	// Health check
 	s.mux.HandleFunc("GET /api/v1/health", s.handleHealth)
 
-	// Issues
+	// Beads - Issues
 	s.mux.HandleFunc("GET /api/v1/issues", s.handleListIssues)
 	s.mux.HandleFunc("GET /api/v1/issues/{id}", s.handleGetIssue)
 
-	// Board
+	// Beads - Board
 	s.mux.HandleFunc("GET /api/v1/board", s.handleBoard)
 
-	// Graph
+	// Beads - Graph
 	s.mux.HandleFunc("GET /api/v1/graph", s.handleGraph)
 
 	// SSE Events
 	s.mux.HandleFunc("GET /api/v1/events", s.handleEvents)
+
+	// Gas Town - Town
+	s.mux.HandleFunc("GET /api/v1/town", s.handleTown)
+	s.mux.HandleFunc("GET /api/v1/town/status", s.handleTownStatus)
+
+	// Gas Town - Rigs
+	s.mux.HandleFunc("GET /api/v1/town/rigs", s.handleRigs)
+	s.mux.HandleFunc("GET /api/v1/town/rigs/{name}", s.handleRig)
+
+	// Gas Town - Agents
+	s.mux.HandleFunc("GET /api/v1/town/agents", s.handleAgents)
+
+	// Gas Town - Convoys
+	s.mux.HandleFunc("GET /api/v1/town/convoys", s.handleConvoys)
+
+	// Gas Town - Mail
+	s.mux.HandleFunc("GET /api/v1/town/mail/{address}", s.handleMail)
 }
 
 // Handler returns the HTTP handler with middleware applied.

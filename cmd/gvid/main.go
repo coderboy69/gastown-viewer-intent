@@ -21,6 +21,7 @@ func main() {
 	port := flag.Int("port", 7070, "HTTP server port")
 	host := flag.String("host", "localhost", "HTTP server host")
 	workDir := flag.String("dir", "", "Working directory (default: current directory)")
+	townRoot := flag.String("town", "", "Gas Town workspace root (default: ~/gt)")
 	showVersion := flag.Bool("version", false, "Show version and exit")
 	flag.Parse()
 
@@ -37,6 +38,7 @@ func main() {
 	config.Port = *port
 	config.Host = *host
 	config.Version = version
+	config.TownRoot = *townRoot
 
 	// Create and start server
 	server := api.NewServer(config, adapter)

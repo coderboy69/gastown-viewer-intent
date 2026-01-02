@@ -249,3 +249,264 @@
 .error button:hover {
   background: #2563eb;
 }
+
+/* View Tabs */
+.view-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tab {
+  background: transparent;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.15s;
+}
+
+.tab:hover {
+  border-color: #60a5fa;
+  color: #e2e8f0;
+}
+
+.tab.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+/* Town View */
+.town-view {
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.town-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.town-empty h2 {
+  color: #f59e0b;
+  margin-bottom: 0.5rem;
+}
+
+.town-empty p {
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.town-empty code {
+  background: #1e293b;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+  color: #60a5fa;
+}
+
+/* Town Status Bar */
+.town-status-bar {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem 1.5rem;
+  background: #1e293b;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  margin-bottom: 1.5rem;
+}
+
+.status-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.status-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+/* Town Agents Section */
+.town-agents,
+.town-rigs,
+.town-convoys {
+  margin-bottom: 2rem;
+}
+
+.town-agents h3,
+.town-rigs h3,
+.town-convoys h3 {
+  font-size: 1rem;
+  color: #94a3b8;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #334155;
+}
+
+.agents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.empty-message {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.empty-message code {
+  background: #1e293b;
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  font-family: monospace;
+  color: #60a5fa;
+}
+
+/* Agent Card */
+.agent-card {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+}
+
+.agent-icon {
+  font-size: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1e293b;
+  border-radius: 6px;
+}
+
+.agent-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.agent-name {
+  font-weight: 600;
+  color: #f8fafc;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.agent-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.agent-role {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: capitalize;
+}
+
+.agent-rig {
+  font-size: 0.75rem;
+  color: #60a5fa;
+  font-family: monospace;
+}
+
+/* Rig Card */
+.rigs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1rem;
+}
+
+.rig-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rig-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #0f172a;
+  border-bottom: 1px solid #334155;
+}
+
+.rig-name {
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.rig-stats {
+  font-size: 0.75rem;
+  color: #10b981;
+}
+
+.rig-agents {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Convoy Card */
+.convoys-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.convoy-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.convoy-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.convoy-title {
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.convoy-progress {
+  font-size: 0.875rem;
+  color: #10b981;
+  font-weight: 600;
+}
+
+.convoy-id {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-family: monospace;
+}
