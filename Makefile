@@ -1,4 +1,4 @@
-.PHONY: dev test build clean help daemon web tui
+.PHONY: dev test build clean help daemon web tui release release-snapshot install
 
 # Default target
 help:
@@ -55,5 +55,19 @@ build:
 # Clean
 clean:
 	rm -rf bin/
+	rm -rf dist/
 	rm -rf web/dist/
 	go clean ./...
+
+# Release with goreleaser
+release:
+	goreleaser release --clean
+
+# Snapshot release (no publish)
+release-snapshot:
+	goreleaser release --snapshot --clean
+
+# Install locally
+install: build
+	@chmod +x deploy/install.sh
+	@./deploy/install.sh

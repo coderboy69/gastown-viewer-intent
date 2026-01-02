@@ -1,0 +1,28 @@
+[Unit]
+Description=Gastown Viewer Intent Daemon
+Documentation=https://github.com/intent-solutions-io/gastown-viewer-intent
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/gvid --host 0.0.0.0 --port 7070
+Restart=always
+RestartSec=5
+User=gvid
+Group=gvid
+WorkingDirectory=/var/lib/gvid
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+ReadWritePaths=/var/lib/gvid
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gvid
+
+[Install]
+WantedBy=multi-user.target
