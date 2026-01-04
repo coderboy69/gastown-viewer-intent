@@ -14,7 +14,8 @@ import (
 	"github.com/intent-solutions-io/gastown-viewer-intent/internal/beads"
 )
 
-const version = "0.1.0"
+// version is set by goreleaser ldflags at build time
+var version = "dev"
 
 func main() {
 	// Parse flags
