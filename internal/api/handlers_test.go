@@ -22,8 +22,9 @@ func TestHealthHandler(t *testing.T) {
 
 	server.Handler().ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Errorf("Expected status 200, got %d", w.Code)
+	// Health returns 200 if beads available, 503 if not (CI has no bd CLI)
+	if w.Code != http.StatusOK && w.Code != http.StatusServiceUnavailable {
+		t.Errorf("Expected status 200 or 503, got %d", w.Code)
 	}
 
 	var resp map[string]interface{}
@@ -31,6 +32,7 @@ func TestHealthHandler(t *testing.T) {
 		t.Fatalf("Failed to parse response: %v", err)
 	}
 
+	// Version should always be present
 	if resp["version"] != config.Version {
 		t.Errorf("Expected version %s, got %v", config.Version, resp["version"])
 	}
