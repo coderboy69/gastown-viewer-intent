@@ -5,9 +5,16 @@
 [![Release](https://img.shields.io/github/v/release/intent-solutions-io/gastown-viewer-intent)](https://github.com/intent-solutions-io/gastown-viewer-intent/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## What's New in v0.2.0
+## What's New in v0.3.0
 
-Three best-in-class features that set this apart from any open-source alternative:
+Four best-in-class features that set this apart from any open-source alternative:
+
+### Convoy Dashboard (New!)
+- Track batch work progress across multiple rigs
+- Visual progress bar with Done/Active/Blocked/Pending counts
+- Priority badges with color coding (critical, high, medium, low)
+- Assigned agents display for each convoy
+- Individual convoy detail endpoint
 
 ### Interactive Dependency Graph
 - D3.js force-directed visualization of all **14 Beads edge types**
@@ -103,6 +110,9 @@ curl "http://localhost:7070/api/v1/graph?format=dot" | dot -Tsvg > deps.svg
 
 # List active molecules
 curl http://localhost:7070/api/v1/town/molecules
+
+# List active convoys
+curl http://localhost:7070/api/v1/town/convoys
 ```
 
 ## Architecture
@@ -169,6 +179,7 @@ curl http://localhost:7070/api/v1/town/molecules
 | `GET /api/v1/town/rigs/:name` | Single rig details |
 | `GET /api/v1/town/agents` | All agents with status |
 | `GET /api/v1/town/convoys` | Active convoys |
+| `GET /api/v1/town/convoys/:id` | Single convoy details |
 | `GET /api/v1/town/molecules` | Active molecules across agents |
 | `GET /api/v1/town/molecules/:id` | Single molecule details |
 | `GET /api/v1/town/mail/:address` | Agent mail inbox |
